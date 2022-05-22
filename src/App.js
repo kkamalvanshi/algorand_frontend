@@ -24,6 +24,10 @@ function App() {
   const [address, setAddress] = useState("");
   const [chain, setChain] = useState("ETH");
 
+  const [result, setResult] = useState("");
+
+  const appId = 13793863;
+
 
   
   async function getLibrary(provider) {
@@ -122,28 +126,24 @@ function App() {
       console.log('SUCCESSFUL');
     }, []);
   
-    return <ExampleAlgoSigner title="Get Accounts" buttonText="Get Accounts" buttonAction={action}/>
+    return <ExampleAlgoSigner title="Get Accounts" buttonText="AlgoSigner 🅰️" buttonAction={action}/>
   };
 
   const ExampleAlgoSigner = ({title, buttonText, buttonAction}) => {
-    const [result, setResult] = useState("");
+    
   
     const onClickAlgo = useCallback(async () => {
       const r = await buttonAction();
       setResult(r);
       console.log('SUCCESSFUL');
+      setAddress(result.substring(22,60));
+      console.log('key: ' + result.substring(22,60));
     }, [buttonAction]);
     
   
     return (
       <>
-        <Header as="h2" dividing>{title}</Header>
-        <Button primary={true} onClick={onClickAlgo}>{buttonText}</Button>
-        <Message>
-          <code>
-            {result}
-          </code>
-        </Message>
+        <button className = 'buttonAlgo button2' primary={true} onClick={onClickAlgo}>{buttonText}</button>
       </>
     );
   };
@@ -196,7 +196,7 @@ function App() {
 
     
 
-    <Web3ReactProvider getLibrary={getLibrary}>
+    
 
     <div className="App">
       <header className="App-header">
@@ -244,18 +244,12 @@ function App() {
           </section>
         </Fragment>
 
-        <Fragment>
-          <section className = "info-container">
-              <button className ='buttonAlgo button2'>
-                  AlgoSign 🅰️
-              </button>
-          </section>
-        </Fragment>
+        <GetAccounts/>
       
     </div>
 
-    <GetAccounts/>
-    </Web3ReactProvider>
+      
+    
   );
 }
 
