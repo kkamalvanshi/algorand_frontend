@@ -9,13 +9,13 @@ import { Web3Provider } from "@ethersproject/providers";
 import Clock from './Components/Clock';
 import NFTInfo from './Components/NFTInfo';
 import TopBid from './Components/TopBid';
-import MakeOffer from './Components/MakeOffer';
 
 import React, { useEffect, useState, useCallback } from "react";
 import {Button, Header, Message} from "semantic-ui-react";
 import { Fragment } from "react";
+import ReactDOM from "react-dom/client";
 
-//Metamask
+//Coinbase
 import { ethers } from 'ethers';
 
 function App() {
@@ -25,11 +25,14 @@ function App() {
   const [addressSOL, setAddressSOL] = useState("");
   const [addressALGO, setAddressALGO] = useState("");
   const [address, setAddress] = useState("");
+  const [currCoin, setCurrCoin] = useState("");
+
+  const [tokens, setTokens] = useState(null);
+  const [coin, setCoin] = useState("");
 
   const [result, setResult] = useState("");
 
   const appId = 13793863;
-
 
   
   async function getLibrary(provider) {
@@ -50,6 +53,8 @@ function App() {
       const response = await solana.connect();
       console.log('Connected with Public Key:', response.publicKey.toString());
       setAddressSOL(response.publicKey.toString());
+      setAddress(response.publicKey.toString());
+      setCurrCoin("SOL");
     }
   };
 
@@ -68,7 +73,7 @@ function App() {
 
           setAddressSOL(response.publicKey.toString());
           setAddress(response.publicKey.toString());
-          setChain("SOL");
+          setCurrCoin("SOL");
         }
       } else {
         alert('Solana object not found! Get a Phantom Wallet');
@@ -88,12 +93,12 @@ function App() {
 
 
   
-  async function requestAcccountMetamask() {
+  async function requestAcccountCoinbase() {
   
-    console.log('Requesting Metamask account');
+    console.log('Requesting Coinbase account');
   
     if(window.ethereum) {
-        console.log('Metamask detected');
+        console.log('Coinbase detected');
         try {
             const accounts = await window.ethereum.request({
                 method : "eth_requestAccounts",
@@ -101,25 +106,31 @@ function App() {
             console.log(accounts);
             setAddressETH(accounts[0]);
             setAddress(accounts[0]);
-            setChain("ETH");
+            setCurrCoin("ETH");
         } catch (error) {
-            console.log('Error Connecting to Metamask');
+            console.log('Error Connecting to Coinbase');
         }
     } else {
-        console.log('Metamask not detected');
+        console.log('Coinbase not detected');
     }
   }
 
-  async function connectWalletMetamask() {
+  async function connectWalletCoinbase() {
     if(window.ethereum) {
-      await requestAcccountMetamask();
+      await requestAcccountCoinbase();
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
     }
   }
 
   const GetAccounts = () => {
+
     const action = useCallback(async () => {
+      if (typeof AlgoSigner !== 'undefined') {
+        console.log('AlgoSigner is installed')
+      } else {
+        console.log("AlgoSigner is NOT installed.");
+      }
       await AlgoSigner.connect({
         ledger: 'TestNet'
       });
@@ -134,6 +145,8 @@ function App() {
   };
 
   const ExampleAlgoSigner = ({title, buttonText, buttonAction}) => {
+
+
     
   
     const onClickAlgo = useCallback(async () => {
@@ -142,6 +155,7 @@ function App() {
       console.log('SUCCESSFUL');
       setAddressALGO(result.substring(22,60));
       setAddress(result.substring(22,60));
+      setCurrCoin("ALGO");
       console.log('key: ' + result.substring(22,60));
     }, [buttonAction]);
     
@@ -153,9 +167,19 @@ function App() {
     );
   };
 
-  
 
+  const [inputs, setInputs] = useState({});
 
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setInputs(values => ({...values, [name]: value}))
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(inputs);
+  }
   //timer hooks
   const [timerDays, setTimerDays] = useState();
   const [timerHours, setTimerHours] = useState();
@@ -165,6 +189,8 @@ function App() {
   let interval;
 
   const startTimer = () => {
+
+    //set date
     const countDownDate = new Date("May 22, 2022 10:00:00 AM").getTime();
 
     interval = setInterval(() => {
@@ -196,15 +222,12 @@ function App() {
   useEffect(() => {
     startTimer();
   });
-
+  
+  
   return (
-
-    
-
-    
-
     <div className="App">
       <header className="App-header">
+        
 
         <div>
             <img src={nft} border-radius = '15px' className='button2'/>
@@ -220,13 +243,13 @@ function App() {
               timerSeconds={timerSeconds}
               />
 
-        <MakeOffer/>
+        
 
         <Fragment>
           <section className = "info-container">
               <button className ='buttonWallet button2'
                       onClick={checkWallets}>
-                  {address.substring(0,4)}...{address.substring(39,42)}
+                  {address.substring(0,4)}...{address.substring(address.length-3,address.length)} {'('+currCoin+')'}
               </button>
           </section>
         </Fragment>
@@ -234,7 +257,7 @@ function App() {
         <Fragment>
           <section className = "info-container">
               <button className ='buttonCoinbase button2'
-              onClick={requestAcccountMetamask}>
+              onClick={requestAcccountCoinbase}>
                   Coinbase 🔵
               </button>
           </section>
@@ -250,6 +273,38 @@ function App() {
         </Fragment>
 
         <GetAccounts/>
+
+        
+        <form onSubmit={handleSubmit}> 
+            <section className = "info-container">
+                <section className = "makeoffer button2">
+                    <div>
+                        Make an Offer:
+                    </div>
+                    <div>
+                        <input type="number" 
+                              name="tokens" 
+                              placeholder='#'
+                              value={inputs.tokens || ""} 
+                              onChange={handleChange}></input>
+                    </div>
+                    <div>
+                        <input type="text" 
+                                placeholder = "ALGO"
+                                name="coin" 
+                                value={inputs.coin || ""} 
+                                onChange={handleChange} ></input>
+                    </div>
+                    <div>
+                        <button className ='buttonBid button2' type="submit">Bid</button>
+                    </div>
+                </section>
+            </section>
+            </form>
+
+
+        
+        
       
     </div>
 

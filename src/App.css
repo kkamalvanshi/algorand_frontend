@@ -39,7 +39,7 @@ img {
   border: 2px solid;
   background-color: rgb(193, 189, 211);
   position: absolute;
-  top: 200px;
+  top: 100px;
   right: 26%;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -117,7 +117,7 @@ img {
   background-color: rgb(193, 189, 211);
 
   position: absolute;
-  top: 100px;
+  top: 230px;
   right: 26%;
   padding-top: 10px;
 
@@ -126,11 +126,11 @@ img {
 }
 
 .makeoffer {
-  padding-top: 5px;
+  padding-top: 10px;
   padding-bottom: 5px;
   text-align: center;
   margin: a;
-  height: 9%;
+  height: 15%;
   width: 23.8%;
   color: black;
   border-radius: 15px;
@@ -243,7 +243,7 @@ img {
   transition-duration: 0.4s;
 
   position: absolute;
-  top: 115px;
+  top: 70px;
   right: 45px;
   font-weight: bold;
 }
@@ -265,29 +265,7 @@ img {
   transition-duration: 0.4s;
 
   position: absolute;
-  top: 160px;
-  right: 45px;
-  font-weight: bold;
-}
-
-.buttonPhantomLogout {
-  padding-top: 5px;
-  padding-bottom: 5px;
-  text-align: center;
-  margin: a;
-  height: 40px;
-  width: 170px;
-  color: black;
-  border-radius: 15px;
-  border: 2px solid;
-  background-color: rgb(193, 189, 211);
-
-  cursor: pointer;
-  -webkit-transition-duration: 0.4s; /* Safari */
-  transition-duration: 0.4s;
-
-  position: absolute;
-  top: 300px;
+  top: 115px;
   right: 45px;
   font-weight: bold;
 }
@@ -309,11 +287,61 @@ img {
   transition-duration: 0.4s;
 
   position: absolute;
-  top: 205px;
+  top: 160px;
   right: 45px;
+  font-weight: bold;
+}
+
+.buttonBid {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin: a;
+  height: 30px;
+  width: 100px;
+  color: black;
+  border-radius: 10px;
+  border: 2px solid;
+  background-color: rgb(167, 159, 201);
+
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+
   font-weight: bold;
 }
 
 .button2:hover {
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
 }
+
+input[type=text] {
+  padding-left: 5px;
+  width: 40%;
+  height: 25px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 2px solid;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  outline: none;
+}
+input[type=number] {
+  padding-left: 5px;
+  width: 40%;
+  height: 25px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 2px solid;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  outline: none;
+}
+
+input[type=text]:focus {
+  border: 3px solid #555;
+}
+
+
+
