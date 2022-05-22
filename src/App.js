@@ -21,8 +21,10 @@ import { ethers } from 'ethers';
 function App() {
 
   //wallet connect
+  const [addressETH, setAddressETH] = useState("");
+  const [addressSOL, setAddressSOL] = useState("");
+  const [addressALGO, setAddressALGO] = useState("");
   const [address, setAddress] = useState("");
-  const [chain, setChain] = useState("ETH");
 
   const [result, setResult] = useState("");
 
@@ -47,7 +49,7 @@ function App() {
     if (solana) {
       const response = await solana.connect();
       console.log('Connected with Public Key:', response.publicKey.toString());
-      setAddress(response.publicKey.toString());
+      setAddressSOL(response.publicKey.toString());
     }
   };
 
@@ -64,6 +66,7 @@ function App() {
             'Connected with public key: ', response.publicKey.toString()
           );
 
+          setAddressSOL(response.publicKey.toString());
           setAddress(response.publicKey.toString());
           setChain("SOL");
         }
@@ -96,6 +99,7 @@ function App() {
                 method : "eth_requestAccounts",
             });
             console.log(accounts);
+            setAddressETH(accounts[0]);
             setAddress(accounts[0]);
             setChain("ETH");
         } catch (error) {
@@ -136,6 +140,7 @@ function App() {
       const r = await buttonAction();
       setResult(r);
       console.log('SUCCESSFUL');
+      setAddressALGO(result.substring(22,60));
       setAddress(result.substring(22,60));
       console.log('key: ' + result.substring(22,60));
     }, [buttonAction]);
